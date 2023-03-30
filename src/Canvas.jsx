@@ -6,6 +6,9 @@ function Canvas() {
 	const canvasRef = useRef(null)
 	const contextRef = useRef(null)
 	const canvasContainerRef = useRef(null)
+	const author = "dev"
+	const paths = useRef([])
+
 	let color = "red"
 	const image = new Image();
 	// const img.src = "http://upload.wikimedia.org/wikipedia/commons/d/d2/Svg_example_square.svg";
@@ -46,37 +49,51 @@ function Canvas() {
 		context.strokeStyle = "black"
 		context.lineWidth = 5
 		contextRef.current = context;
-
-		// const image = new Image();
-		/* image.src = `data:image/svg+xml;base64,${window.btoa(svg)}`;
-		image.onload = () => {
-			context.drawImage(image, 0, 0);
-		}; */
 	}, [])
-
 
 	const startDrawing = ({ nativeEvent }) => {
 		const { offsetX, offsetY } = nativeEvent;
 		contextRef.current.beginPath();
 		contextRef.current.moveTo(offsetX, offsetY);
+
+		//	If saving path
+		/* paths.current.push([{
+			x: offsetX,
+			y: offsetY,
+			author: author
+		}]) */
+
 		setIsDrawing(true);
 	};
 
 	const finishDrawing = () => {
+		//	If not saving path
 		contextRef.current.closePath();
 		setIsDrawing(false);
 	};
 
 	const draw = ({ nativeEvent }) => {
+		const canvas = canvasRef.current
+		const context = canvasRef.current.getContext("2d")
+		const { offsetX, offsetY } = nativeEvent;
+		/* context.clearRect(0, 0, canvas.width, canvas.height)
+		image.src = `data:image/svg+xml;base64,${window.btoa(svg)}`;
+		contextRef.current.drawImage(image, offsetX, offsetY);
+		drawPaths() */
 		if (!isDrawing) {
 			return;
 		}
 		let area = canvasContainerRef.current.getBoundingClientRect();
-		const context = canvasRef.current.getContext("2d")
 		// contextRef.current.clearRect(0, 0, area.width, area.height)
-		const { offsetX, offsetY } = nativeEvent;
 		contextRef.current.lineTo(offsetX, offsetY);
 		contextRef.current.stroke();
+
+		/* let currentPathIndex = paths.current.length - 1;
+		paths.current[currentPathIndex].push({
+			x: offsetX,
+			y: offsetY,
+			author: author
+		}) */
 
 		// context.fillStyle = "white"
 		// context.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height)
@@ -89,6 +106,24 @@ function Canvas() {
 		const context = canvas.getContext("2d")
 		context.fillStyle = "white"
 		context.fillRect(0, 0, canvas.width, canvas.height)
+		paths.current = []
+		console.log(`Paths: `, paths)
+	}
+
+	const drawPaths = () => {
+		paths.current.forEach(line => {
+			line.forEach((point, index) => {
+				if (index == 0) {
+					contextRef.current.beginPath();
+					contextRef.current.moveTo(point.x, point.y);
+				} else {
+					contextRef.current.lineTo(point.x, point.y);
+					contextRef.current.stroke();
+				}
+			})
+
+			contextRef.current.closePath();
+		})
 	}
 
 	const clearHandler = () => {
@@ -105,6 +140,7 @@ function Canvas() {
 			></canvas>
 
 			<div id="canvas-menu">
+				<button className="btn btn-primary mx-1" onClick={drawPaths}>Paths</button>
 				<button className="btn btn-primary" onClick={clearHandler}>Clear</button>
 			</div>
 		</div>
