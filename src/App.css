@@ -1,0 +1,14 @@
+body {
+  background-color: #FFF;
+}
+
+.App {
+  background-color: #175dec;
+  height:100%;
+  color:#000;
+  padding:15px;
+  display:flex;
+  justify-content: space-between;
+  gap: 15px;
+  box-sizing: border-box;
+}
