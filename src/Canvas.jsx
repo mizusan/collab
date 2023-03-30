@@ -48,10 +48,10 @@ function Canvas() {
 		contextRef.current = context;
 
 		// const image = new Image();
-		image.src = `data:image/svg+xml;base64,${window.btoa(svg)}`;
+		/* image.src = `data:image/svg+xml;base64,${window.btoa(svg)}`;
 		image.onload = () => {
 			context.drawImage(image, 0, 0);
-		};
+		}; */
 	}, [])
 
 
@@ -68,20 +68,20 @@ function Canvas() {
 	};
 
 	const draw = ({ nativeEvent }) => {
-		let area = canvasContainerRef.current.getBoundingClientRect();
-		const context = canvasRef.current.getContext("2d")
-		// contextRef.current.clearRect(0, 0, area.width, area.height)
-		context.fillStyle = "white"
-		context.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height)
 		if (!isDrawing) {
 			return;
 		}
+		let area = canvasContainerRef.current.getBoundingClientRect();
+		const context = canvasRef.current.getContext("2d")
+		// contextRef.current.clearRect(0, 0, area.width, area.height)
 		const { offsetX, offsetY } = nativeEvent;
 		contextRef.current.lineTo(offsetX, offsetY);
 		contextRef.current.stroke();
 
-		image.src = `data:image/svg+xml;base64,${window.btoa(svg)}`;
-		contextRef.current.drawImage(image, offsetX, offsetY);
+		// context.fillStyle = "white"
+		// context.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height)
+		// image.src = `data:image/svg+xml;base64,${window.btoa(svg)}`;
+		// contextRef.current.drawImage(image, offsetX, offsetY);
 	};
 
 	const clearCanvas = () => {
