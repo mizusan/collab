@@ -91,6 +91,10 @@ function Canvas() {
 		context.fillRect(0, 0, canvas.width, canvas.height)
 	}
 
+	const clearHandler = () => {
+		clearCanvas()
+	}
+
 	return (
 		<div className="canvas" ref={canvasContainerRef}>
 			<canvas
@@ -99,6 +103,10 @@ function Canvas() {
 				onMouseMove={draw}
 				ref={canvasRef}
 			></canvas>
+
+			<div id="canvas-menu">
+				<button className="btn btn-primary" onClick={clearHandler}>Clear</button>
+			</div>
 		</div>
 	)
 }
